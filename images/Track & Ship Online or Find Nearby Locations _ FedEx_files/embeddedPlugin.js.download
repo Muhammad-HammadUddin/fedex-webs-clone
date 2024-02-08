@@ -1,0 +1,894 @@
+if (typeof c2cPlugin == "undefined") {
+  c2cPlugin = function (Inq) {
+    var doc = window.parent.document, cssName = "civ2_fedex_theme/nuance-c2c-button", chatDivID = "nuanMessagingFrame";
+    var evm = Inq.EVM;
+    var CIAPI = Inq.FlashPeer.getSDKInst();
+    
+    var timeoutID = null;
+    var retryCount = 0;
+
+    /**
+     * Function that tries to connect the c2cPlugin with the main
+     * window.messagingApp instance. It stops on success or after 10 seconds of retries.
+     */
+    function tryToSetMessagingAppC2CReference() {
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(function() {
+            if (window.messagingApp) {
+                window.messagingApp.setPluginInstance(c2cPlugin);
+                retryCount = 0;
+            } else if (retryCount++ < 10) {
+                tryToSetMessagingAppC2CReference();
+            } else {
+                retryCount = 0;
+            }
+        }, 1000);
+    }
+
+    /**
+    * plugin registers to recieve c2c events
+    **/
+    evm.addListener({
+      "onC2CReadyForSDK": function(c2cData) {
+        tryToSetMessagingAppC2CReference();
+
+        if(c2c && !c2c.isDisplayed() && c2cData.c2c.image != "d") {
+          c2c.renderC2CButton(c2cData.c2c);
+        }
+      }
+    });
+
+    evm.addListener({
+      "onC2CStateChanged": function(c2cData) {
+        if(c2c && c2c.isDisplayed()) {
+          if (c2cData.c2c.newState == "chatactive") {
+             return;
+          }
+          c2c.renderState(c2cData.c2c.image, c2cData.c2c);
+        } 
+      }
+    });
+
+    evm.addListener({
+      "onChatLaunched": function() {
+        tryToSetMessagingAppC2CReference();
+
+        if(c2c.isDisplayed()){      
+          c2c.showDisabled();       
+        }
+      }
+    });
+
+    evm.addListener({
+      "onChatShown": function() {
+        tryToSetMessagingAppC2CReference(); 
+      }
+    });
+
+    evm.addListener({
+      "onChatClosed":function() {
+        if(c2c) {
+          c2c.clearListeners();
+          c2c.clear();
+        }
+      }
+    });
+
+    evm.addListener({
+      "onChatRequested":function(data) {
+        if(c2c) {
+          var baseUrl = Inq.urls.skinURL+data.chatSpec.chatTheme.fn.replace(/\.(mxml|zip)$/, "");
+          prefetchChatCSS(window.parent.document, baseUrl+"/nuance-chat");
+          prefetchChatCSS(window.document, baseUrl+"/chatui");
+        }
+      }
+    });
+
+    
+    function prefetchChatCSS(doc, url) {
+        const linkTag = doc.createElement('link');
+        linkTag.rel = 'prefetch';
+        linkTag.href = url + ".css";
+        linkTag.as = 'style';
+
+        //inject tag in the head of the document
+        doc.head.appendChild(linkTag);
+    }
+
+
+    /**
+    * plugin injects css to the parent document
+    **/
+    function injectStyleSheet(path, doc, cssName) {
+      var link = doc.createElement('link');
+      link.setAttribute('rel', 'stylesheet');
+      link.type = 'text/css';
+      link.href = [path,cssName,".css"].join("");
+      doc.head.appendChild(link);
+    }
+
+    injectStyleSheet(Inq.urls.skinURL, doc, cssName);
+
+    if (typeof Object.assign !== 'function') {
+      // Must be writable: true, enumerable: false, configurable: true
+      Object.defineProperty(Object, "assign", {
+        value: function assign(target, varArgs) { // .length of function is 2
+          'use strict';
+          if (target === null || target === undefined) {
+            throw new TypeError('Cannot convert undefined or null to object');
+          }
+
+          var to = Object(target);
+
+          for (var index = 1; index < arguments.length; index++) {
+            var nextSource = arguments[index];
+
+            if (nextSource !== null && nextSource !== undefined) {
+              for (var nextKey in nextSource) {
+                // Avoid bugs when hasOwnProperty is shadowed
+                if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                  to[nextKey] = nextSource[nextKey];
+                }
+              }
+            }
+          }
+          return to;
+        },
+        writable: true,
+        configurable: true
+      });
+    }
+
+
+    var addElement = Element.prototype.addElement = function(e, t, r, n) {
+        e = document.createElement(e || "div");
+        for (var a in t) { 
+          if ("object" == typeof t[a] && void 0 !== e[a]) {
+            Object.assign(e[a], t[a])
+          } else {
+            e[a] = t[a];
+          }
+        }
+        for (var s in r) {
+          if ("function" != typeof r[s] && new String(r[s]).length > 0) { 
+            e.setAttribute(s, r[s]); 
+          }
+        }
+
+         if (!("string" != typeof n && "object" != typeof n)) {
+            var classesList;
+            if ("string" == typeof n) {
+              classesList = n.split(",");
+            } else {
+              classesList = n.filter(Boolean);
+            }
+            if (classesList && classesList.length > 0) {
+              e.classList.add.apply(e.classList,  classesList);          
+            }
+         }
+         if (this instanceof Element) {
+            (t && t.hasOwnProperty("varName") && (this[t.varName] = e), this.appendChild(e), this)
+         }
+
+        return e;
+    },
+    buildHTML = Element.prototype.buildHTML = function(e, t) {
+        t = null == t ? this instanceof Element ? this : document.createElement("div") : t;
+        var r = this instanceof Element ? this : t;
+        for (var n in e) {
+            var a = e[n] instanceof Element ? e[n] : addElement(e[n].name, e[n].properties, e[n].attributes, e[n].classes);
+            e[n].hasOwnProperty("children") && e[n].children.length > 0 && a.buildHTML(e[n].children, t), e[n].hasOwnProperty("varName") && (t[e[n].varName] = a), e[n].hasOwnProperty("localVarName") && (r[e[n].localVarName] = a), e[n].hasOwnProperty("arrName") && (t.hasOwnProperty(e[n].arrName) ? t[e[n].arrName].push(a) : t[e[n].arrName] = [a]), e[n].prepend ? r.insertAdjacentElement("afterbegin", a) : r.appendChild(a)
+        }
+        if (!(this instanceof Element) && r == t) return 1 == e.length ? (Object.assign(t.children[0], t), t.children[0]) : t
+    };
+
+
+    /************************** Custom Bootstrap C2C rendering logic ***********************************/
+
+    /**
+
+    **/
+
+    var BootStrapC2C = function(options) {
+      options = Object(options);
+
+      /**
+       * Messages to be read out-loud to a client who is using screen-reader when the user focuses (tabs over) the Click2Chat
+       * button.
+       *
+       * @type {{resume: string, start: string, end: string}}
+       */
+      this.accessibilityMessages = {
+        end: "End Chat",
+        resume: "Resume Chat",
+        start: "Start Chat",
+        minimize: "Minimize Chat",
+        toggleButtons: "Toggle Buttons",
+        onMinimize: "Chat window minimized. To resume, select chat button or press alt plus 1",
+        newMessageSingular: "You have {count} unread message.",
+        newMessagePlural: "You have {count} unread messages.",
+        onDisplay: "Chat available, press ALT plus 1 to open",
+        openChat: "Chat window open, press ALT plus 2 to minimize and ALT plus 9 to end chat."
+      };
+      for (var prop in options.accessibilityMessages) {
+        this.accessibilityMessages[prop] = options.accessibilityMessages[prop];
+      }
+
+      
+      this.flyInOpener = typeof options.flyInWelcomePopup == "undefined"? false : options.flyInWelcomePopup;
+      this.flyInOpenerMsg = options.flyInWelcomeMsg || "We are here, lets Chat!" ;
+      this.useOpener = options.useOpenerForWelcomeMsg;
+      this.flyInHeader = options.flyInHeader || "Bot Support" ;
+      this.flyInDelay = options.flyInWelcomeDelay || 3000;
+      this.flyInUrl = options.flyInAvatarUrl;
+      this.flyInW = options.flyInAvatarWidth || 30;
+      this.flyInH = options.flyInAvatarHeight || 30;
+      this.showMinimizedBadge = typeof options.showMinimizedBadge == "undefined"? true: options.showMinimizedBadge;
+      this.showMinimizedBadgeOnZero = options.showMinimizedBadgeOnZero || false;
+      this.showFlyinMinimizedMessage =  typeof options.showFlyinMinimizedMessage == "undefined"? false: options.showFlyinMinimizedMessage;
+      this.allowDragging = typeof options.dragEnabled == "undefined"? true : options.dragEnabled;
+      this.parentElement = options.parentElement;
+      this.richPayload = options.openerWidget;
+      this.openerWidgetCallback = options.openerWidgetCallback;
+      this.minPayload = options.minimizedWidget;
+      this.minWidgetCallback = options.minimizedWidgetCallback;
+
+    /*
+    * Function.prototype.bind creates a new function instance,
+    * Need to keep a reference or else removeEventListener cannot remove
+    */
+    this.onC2CClickedBind = this.onC2CClicked.bind(this);
+      this.minimizeClickedBind = this.minimizeClicked.bind(this);
+      this.closeClickedBind = this.closeClicked.bind(this);
+      this.onC2CKeyPressedBind = this.onC2CKeyPressed.bind(this);
+    this.onC2CKeydownBind = this.onC2CKeydown.bind(this);
+    
+    
+      this.ariaReaderMinimized = new this.ariaReader({
+         initMsg: this.accessibilityMessages.onMinimize,
+         cssName: 'onMinimize'
+      });
+
+      this.ariaReaderOnOpen = new this.ariaReader({
+         initMsg: this.accessibilityMessages.openChat,
+         cssName: 'onOpen'
+      });
+      this.ariaReaderOnDisplay = new this.ariaReader({
+         initMsg: this.accessibilityMessages.onDisplay,
+         cssName: 'onDisplay',
+         role: 'alert'
+      });
+      this.isChatLoadedOnce = false;
+      this.isChatDisplayedOnce = false; 
+      this.isChatMinimizedOnce = false; 
+
+      this.fabButtons = {
+        main: {
+          name: "button",
+          properties: { textContent: BootStrapC2C.FAB_SETTINGS.mainText, onclick: this.onC2CClickedBind},
+          localVarName: "main",
+          classes: [BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-main", "fab-init"],
+          attributes:{ 
+            "tabindex":"0",
+            "title":this.accessibilityMessages.start
+          }
+        },
+       min: {
+         name: "button",
+         properties: { textContent: "Minimize", onclick: this.minimizeClickedBind, onanimationend: this.animEnd},
+         classes: [BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-minimize","fab-init"],
+         attributes:{ 
+            "tabindex":"0",
+            "title":this.accessibilityMessages.minimize
+          }
+       },
+       close: {
+         name: "button",
+         properties: { textContent: "End Chat", onclick: this.closeClickedBind, onanimationend: this.animEnd},
+         classes: [BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-close","fab-init"],
+         attributes:{ 
+            "tabindex":"0",
+            "title":this.accessibilityMessages.end
+          }
+       },
+       busy: {
+           name: "div",
+           localVarName: "busy",
+          //  properties: { textContent: SETTINGS.fab.busyText, title: SETTINGS.fab.busyText },
+           classes: [BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-main","busy-state"]
+       }
+
+      }; 
+    }
+
+    BootStrapC2C.FAB_SETTINGS = {
+      selectorPrefix: "nuance-",
+      removeOnLaunch: false,
+      mainText:"ASK FEDEX"   
+    };
+
+
+     /**
+        Nuance Messaging C2C button can be in one of the following states
+        {
+           disabled: "d", 
+           chatactive:"d", 
+           busy: "b", 
+           afterHours: "ah", 
+           ready: "r"
+        } 
+     **/
+
+     BootStrapC2C.prototype.renderC2CButton = function (c2cData, isDisplay) {
+           var el,ariaText,bc, bi, msgCount, hc = "";
+           if(!this.parentElement) {
+            return;
+           }
+           this.c2cData = c2cData;
+          
+           if(this.eDiv) {
+              el = this.eDiv;
+           } else {
+              el =  buildHTML([{
+                     name:"div",
+                     properties: { id: BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-container" },
+                     varName: "fab",
+                     children: [this.fabButtons.main],
+                     classes: []
+               }]);                     
+            
+              this.parentElement.appendChild(el);
+              if(!this.allowDragging) {
+                 el.style.position = "fixed";
+              }
+              this.eDiv = el;
+              this.mainButton = this.eDiv.querySelector("."+this.fabButtons.main.classes[0]);
+           }
+             
+            applyStyle.call(this);
+            el.classList.add('enter');
+          
+          
+           el.idx=c2cData.idx;      
+           this.didShow = true;
+        
+
+           if (c2cData.launchable || c2cData.displayState == "chatactive") {
+            el.addEventListener("keydown", this.onC2CKeydownBind);
+
+            window.parent.removeEventListener("keydown", this.onC2CKeyPressedBind);
+            window.parent.addEventListener("keydown", this.onC2CKeyPressedBind);
+           }
+
+           function applyStyle() {
+             
+              switch(c2cData.image) {
+                 case "r":                                
+                    if (!this.isChatLoadedOnce) {
+                         // Init aria reader
+                         this.ariaReaderOnDisplay.setParent(el);
+                         hc += this.ariaReaderOnDisplay.getHtml();
+                         this.isChatLoadedOnce = true;
+                     }
+                     else {
+                         this.ariaReaderOnDisplay.reset();
+                     }
+                     
+                     this.mainButton.setAttribute("title", this.accessibilityMessages.start);
+
+                    if(this.flyInOpener && !c2cData.reDisplay) {
+                       var  that = this;
+                       this.flyInTimer = setTimeout(function() {
+                          that.displayFlyInOpener();
+                          if(that.flyInOpenerMsg && !that.useOpener) {
+                              that.flyInContent(that.flyInUrl,that.flyInW,that.flyInH,that.flyInOpenerMsg);
+                          } else if(c2cData.opID && that.useOpener) {
+                            CIAPI.getOpenerScripts(function(data) {
+                                var parser = new DOMParser();
+                                var xmlDoc = parser.parseFromString(data,"text/xml");
+                                
+                                that.flyInContent(that.flyInUrl,that.flyInW,that.flyInH,xmlDoc.getElementsByTagName("script")[0].textContent);
+                            }, c2cData.opID);
+                          }
+                          if(that.richPayload) {
+                             that.renderRichWidgetInOpener(that.richPayload, that.openerWidgetCallback)
+                          }
+                       },this.flyInDelay);
+                       
+                    }
+                    break;
+                 case "ah":                 
+                      this.hide();            
+                  break;
+                 case "d":                                
+                    if (isDisplay){
+                        // Init aria reader
+                        this.ariaReaderOnOpen.setParent(el);
+                        hc += this.ariaReaderOnOpen.getHtml();
+                        this.isChatDisplayedOnce = true;
+                    }
+                    else {                      
+                        this.ariaReaderOnOpen.reset();
+                    }
+                    this.addSubBtns();
+                    this.deleteBadge();
+                    this.mainButton.setAttribute("title", this.accessibilityMessages.toggleButtons);
+                    this.mainButton.classList.remove("fab-init");
+                    break;
+                  case "b":
+                      this.hide();            
+                    break;
+                  case "m":
+                    
+                    // Init aria reader
+                    this.mainButton.setAttribute("title", this.accessibilityMessages.resume);
+                    if (!this.isChatMinimizedOnce) {
+                      this.ariaReaderMinimized.setParent(el);                  
+                      hc += this.ariaReaderMinimized.getHtml();
+                      this.isChatMinimizedOnce = true;
+                    }
+
+					msgCount = c2cData.count || 0;
+                    // Change initial message if unread messages present.
+                    this.setAriaNewUnreadMessage(msgCount);
+
+                    if(this.showMinimizedBadge) {
+						this.countEl = null;
+						if(msgCount > 0 || this.showMinimizedBadgeOnZero) {
+							this.addMinimizedBadge(msgCount);
+						}
+                    }
+                    
+                    this.removeSubBtns(); 
+                    this.eDiv.classList.add("fab-minimized")
+                    this.eDiv.setAttribute("tabindex", "0");
+               this.eDiv.focus();
+                    break;
+
+                 default:                  
+                    
+                    break;
+           }
+
+           if(hc) {
+              el.insertAdjacentHTML("beforeend",hc);
+           }
+        }
+
+     };
+
+     BootStrapC2C.prototype.addSubBtns = function(){
+        if(!this.eDiv.querySelector("."+BootStrapC2C.FAB_SETTINGS.selectorPrefix+"fab-sub")){
+           var sub = buildHTML([{
+                name: "div",
+                prepend: true,
+                localVarName: "sub",
+                classes: BootStrapC2C.FAB_SETTINGS.selectorPrefix + "fab-sub",
+                children:[this.fabButtons.close,this.fabButtons.min]
+            }]);
+            this.eDiv.insertAdjacentElement("afterbegin",sub);
+        }
+    }
+
+    BootStrapC2C.prototype.removeSubBtns = function(){
+      var sub = this.eDiv.querySelector("."+BootStrapC2C.FAB_SETTINGS.selectorPrefix+"fab-sub");
+      if (sub) {
+       sub.parentElement.removeChild(sub);
+      }
+       
+    }
+
+    BootStrapC2C.prototype.removeContainer = function(){
+      if (this.eDiv) {
+       this.eDiv.parentElement.removeChild(this.eDiv);
+      }
+       
+    }
+
+    BootStrapC2C.prototype.animEnd = function(e){
+       e.currentTarget.classList.remove("fab-init");
+    }
+
+    BootStrapC2C.prototype.hide = function(){
+       this.eDiv.style.display = "none";
+     }
+
+     /**
+     * ARIA reader for new message alerts.
+     * Creates the initial html and provides a way to update the messages
+     * @param {Object} options - Reader options 
+     * @property {string} initMsg - Initial message to set in aria-live div.
+     * @property {string} role - ARIA role to set to aria-live div.
+     */
+    BootStrapC2C.prototype.ariaReader = function(options) {
+       options = options || {};
+       var _parentEl;
+       var _initMsg = _lastMsg = "";
+       var _role = "log";
+       var _cssSubName = "";
+       if(options.initMsg){
+          _initMsg = options.initMsg
+       }
+       if(options.role){
+          _role = options.role
+       }
+        if(options.cssName){
+            _cssSubName = options.cssName;
+        }
+
+        function getHtml(){
+          var msg = _lastMsg || _initMsg;
+            return "<div class='aria-reader " + _cssSubName + "' role='"+_role+"' aria-live='polite'>" + msg + "</div>";
+        }
+       function setParent(el){
+          _parentEl = el;
+       }
+        function getReaderEl(){
+          if (_parentEl) {
+              return _parentEl.querySelector(".aria-reader" + (_cssSubName ? ("."+ _cssSubName) : ""));
+          }
+        }
+       function setMessage(message){
+        var el = getReaderEl();
+        if (el) {
+           el.innerHTML = message;
+        }
+        _lastMsg = message;
+       }
+       function setRole(ariaRole){
+        var el = getReaderEl();
+        if (el) {
+           el.setAttribute('role', ariaRole);
+        }
+       }
+       function reset(){
+          setMessage("");
+       }
+
+       return{
+          getHtml: getHtml,
+          setParent: setParent,
+          setMessage: setMessage,
+          setRole: setRole,
+          reset : reset
+       };
+    };
+
+    BootStrapC2C.prototype.setAriaNewUnreadMessage = function(count) {
+        if (count == 0) {
+           this.ariaReaderMinimized.reset();
+           return;
+        }
+        var msg = this.accessibilityMessages.newMessageSingular;
+        if (count > 1) {
+           msg = this.accessibilityMessages.newMessagePlural;
+        }
+        msg = msg.replace("{count}", count);
+        this.ariaReaderMinimized.setMessage(msg);
+     }
+
+     /**
+        This method fires when Nuance Framework changes the c2c state , for example from buzy to ready
+     **/
+     BootStrapC2C.prototype.renderState = function(image, data){
+        this.c2cData.image = image;
+        this.c2cData.launchable = data.launchable;
+        this.c2cData.idx = data.idx || this.c2cData.idx;
+        this.renderC2CButton(this.c2cData, !this.isChatDisplayedOnce);
+     };
+
+    /**
+        This method fires when Nuance Framework determines when c2c needs to be disabled, for example when chat is launched
+     **/
+
+     BootStrapC2C.prototype.showDisabled = function() {
+        this.c2cData.image = "d";
+        this.c2cData.launchable = false;
+        this.renderC2CButton(this.c2cData, !this.isChatDisplayedOnce);
+     };
+
+     BootStrapC2C.prototype.setParentElement = function(el) {
+        this.parentElement = el;
+     };
+
+     BootStrapC2C.prototype.isDisplayed = function() {
+        return this.didShow;
+     };
+
+     BootStrapC2C.prototype.onC2CClicked = function(event) {
+        if(event && event.preventDefault) {
+          event.preventDefault();
+        }
+        if(this.c2cData.image == "r") {
+           CIAPI.onC2CClicked(this.c2cData.idx, function(c2cState) {
+            if(c2cState && c2cState.state == "disabled" ) {
+              c2c.showDisabled(); 
+            }
+
+           }); 
+           if(this.flyInTimer != -1) {
+              clearTimeout(this.flyInTimer);
+           }
+           this.eDiv.classList.remove("fab-init");
+           
+        } else if(this.c2cData.image == "m") {
+            this.c2cData.count = 0; 
+            this.showDisabled();
+            this.eDiv.classList.remove("fab-minimized");
+
+            if(window.messagingApp) {
+                window.messagingApp.onRestoredClicked();
+            }
+        } else {
+          this.eDiv.classList.toggle("fab-expand")
+        }
+
+        this.flyInClose();
+     };
+
+     BootStrapC2C.prototype.onC2CKeydown = function(event) {
+      if(event.keyCode == 13){
+         this.onC2CClicked(event);
+      }
+     };
+  
+     BootStrapC2C.prototype.minimizeClicked = function() {
+         if(window.messagingApp) { 
+           window.messagingApp.getCIAppInstance().minimize();
+         }       
+     };
+
+     BootStrapC2C.prototype.closeClicked = function() {
+         this.onClose();
+     }
+
+     BootStrapC2C.prototype.addMinimizedBadge = function(count) {
+        if(this.mainButton) {
+			this.mainButton.insertAdjacentHTML("beforeend",["<div aria-hidden='true' class='badge",count>0?" bounce":"","'><div class='message-count'>",count,"</div></div>"].join(""));
+		}
+     };
+
+     BootStrapC2C.prototype.newMinimizedMessage = function(count,msgObject) {
+        if(this.showMinimizedBadge) {
+            var badge = this.getBadge();
+            if(!badge) {
+                this.addMinimizedBadge(count);
+            }
+            else {
+                if(!badge.classList.contains("bounce")) {
+                     badge.classList.add("bounce"); 
+                }
+                this.countEl = badge.querySelector(".message-count");
+                if (this.countEl) {
+                  this.countEl.innerText = count;
+                }
+            }
+
+        } 
+        if (this.showFlyinMinimizedMessage) {
+             var animate = false;
+             if(!this.flyel) {
+                 this.displayFlyInOpener();     
+                 if(this.minPayload) {
+                    this.renderRichWidgetInOpener(this.minPayload, this.minWidgetCallback)
+                 }          
+             }  else {
+              animate = true;
+             }
+             this.flyInContent(this.flyInMinImgUrl,this.flyInW,this.flyInH,msgObject.data["chatFinalText"] || msgObject.data["messageText"],animate);
+        }
+        // Aria-live status message update.
+        this.setAriaNewUnreadMessage(count);
+     };
+
+     BootStrapC2C.prototype.getBadge = function() {
+        if (!this.badgeEl) {
+          this.badgeEl = this.mainButton.querySelector(".badge");
+        }
+        return this.badgeEl;
+     };
+
+     BootStrapC2C.prototype.deleteBadge = function() {
+        var badgeEl = this.getBadge();
+        if (badgeEl) {
+          badgeEl.parentElement.removeChild(badgeEl);
+          this.badgeEl = null;
+        }
+        
+     };
+
+     BootStrapC2C.prototype.displayFlyInOpener = function() {
+        var fragment  = document.createDocumentFragment();
+        var flyel = document.createElement("div");
+        flyel.classList.add("nuan-flyin-opener");
+        flyel.style.right = this.c2cR + (this.width/2) + "px";
+        flyel.style.bottom = this.c2cB + this.height + 20 + "px";
+        /**
+        * fly-in element close button is an svg element, modify the code here to change the look and feel    
+        **/
+        var htmls = ["<div class='closeBtnCont'><div class='flyin-close-btn' tabindex='0' role='button'><svg width='10px' height='10px' viewBox='0 0 14 14'><g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'><g transform='translate(-419.000000, -413.000000)'><g transform='translate(164.000000, 396.000000)'><g><g transform='translate(250.000000, 12.000000)'><g><g><rect opacity='0.200000003' x='0' y='0' width='24' height='24'></rect><g transform='translate(4.000000, 4.000000)' fill='#000000'><rect transform='translate(8.000000, 8.000000) rotate(45.000000) translate(-8.000000, -8.000000) ' x='7' y='-1' width='2' height='18' rx='1'></rect><rect transform='translate(8.000000, 8.000000) rotate(135.000000) translate(-8.000000, -8.000000) ' x='7' y='-1' width='2' height='18' rx='1'></rect></g></g></g></g></g></g></g></g></svg></div></div>","<div class='flyInHeader'><strong>",this.flyInHeader,"</strong></div>"];
+       
+       
+        htmls.push("<div class='opener-container'> </div></div>");
+        
+        flyel.innerHTML = htmls.join("");
+
+        fragment.appendChild(flyel);
+        flyel.addEventListener("click", this.flyInClose.bind(this));
+        this.flyel = flyel;
+        this.parentElement.appendChild(fragment);
+        setTimeout(function(){
+           flyel.classList.add('enter');   
+        },this.animateDelay);
+        
+
+
+     };
+
+     BootStrapC2C.prototype.flyInContent = function(imgUrl, imgW, imgH , content, animate) {
+
+        let opnrCntr = this.flyel.querySelector(".opener-container")
+        var html = ["<div class='flyinOpenerContainer",animate?" animate":"","'>"];
+        if(imgUrl) {
+           html.push("<div class='flyInMsgAwatarCont'>");
+           html.push("<img class='flyInMsgAwatar' src=",imgUrl," width=", imgW, " height=", imgH,">");
+           html.push("</div>");
+        }
+        html.push("<div class='flyin-bubble-msg-container' style='margin-left:px;'><div class='flyin-bubble-text'>",content,"</div></div></div>");
+        
+        //this.flyel.insertAdjacentHTML('beforeend', html.join("")); 
+        opnrCntr.insertAdjacentHTML('beforeend', html.join("")); 
+
+        if(animate) {
+           setTimeout(function(){
+              opnrCntr.lastChild.classList.add('enter');   
+           }.bind(this),this.animateDelay);
+        }
+     };
+
+     BootStrapC2C.prototype.resetBadge = function(){
+        if(this.countEl){
+           this.countEl.innerText = "0";
+        }
+     };
+
+     BootStrapC2C.prototype.renderRichWidgetInOpener = function(richWidgetPayload, actionCallback) {
+         var container = document.createElement("div");
+         //container.classList.add("flyinOpenerContainer");
+         container.classList.add("flyin-widget");
+         if(RichMain) {
+           var instance = RichMain.instance.renderRichContent(richWidgetPayload,container, "", false);
+           instance.registerCBListener(function(msg){
+              actionCallback && actionCallback(msg, this.c2cData);
+              this.flyInClose();
+           }.bind(this));
+           this.flyel.appendChild(container);
+       }
+     };
+
+     BootStrapC2C.prototype.flyInClose = function() {
+       if(this.flyel) {
+           this.flyel.parentNode.removeChild(this.flyel);
+           this.flyel = null;
+        }
+     };
+
+     BootStrapC2C.prototype.onClose = function() {
+        let closeModal = document.querySelector(".messaging-box close-modal-view");
+        if(closeModal) {
+            return;
+        }
+        else {
+            messagingApp.ciAppInstance.closeChat();
+        }
+     };
+
+     BootStrapC2C.prototype.clearListeners = function() {
+        this.eDiv.removeEventListener("keydown", this.onC2CKeydownBind);
+        window.parent.removeEventListener("keydown", this.onC2CKeyPressedBind);
+     };
+
+     BootStrapC2C.prototype.clear = function() {
+        this.didShow = false;      
+        if(this.flyInTimer != -1) {
+           clearTimeout(this.flyInTimer);
+        }
+        this.deleteBadge();
+        this.removeSubBtns();
+        this.removeContainer();
+        this.mainButton = null;
+        this.eDiv = null;
+        this.countEl = null;
+        this.flyInClose();
+     };
+
+     /**
+      * Set the accessibility message for the Click2Chat button, so that when a user who is using a screen-reader
+      * tabs over to the C2C button it will announce sentences such as: "Start Chat", "Resume Chat", "End Chat"
+      *
+      * @param {string} accessibilityMessage
+      * @returns {undefined}
+      * @private
+      */
+     BootStrapC2C.prototype._setC2CButtonAccessibilityMessage = function (accessibilityMessage) {
+         this.eDiv.setAttribute("title", accessibilityMessage);
+     };
+
+     /**
+      * Called When Key combination or single Key pressed on c2c Button
+      * @param event
+      */
+     BootStrapC2C.prototype.onC2CKeyPressed = function (event) {
+        var DIGIT_NINE_CODE = 57, DIGIT_ONE_CODE = 49, DIGIT_TWO_CODE = 50;
+        var STATE_READY = "r", STATE_MINIMIZED = "m";
+        if (event.altKey && event.keyCode === DIGIT_NINE_CODE) {
+            // Do Nothing if chat is minimized
+            if (this.c2cData.image !== STATE_MINIMIZED) {
+                this.onClose();
+            }
+        }
+        if (event.altKey && event.keyCode === DIGIT_ONE_CODE) {
+            if (this.c2cData.image === STATE_READY) {                    
+                CIAPI.onC2CClicked(this.c2cData.idx, function(c2cState) {
+                if(c2cState && c2cState.state == "disabled" ) {
+                    c2c.showDisabled(); 
+                }
+
+                });                     
+                if (this.flyInTimer != -1) {
+                    clearTimeout(this.flyInTimer);
+                }
+            } else if (this.c2cData.image === STATE_MINIMIZED) {
+                if(window.messagingApp) {
+                    window.messagingApp.onRestoredClicked();
+                }
+                this.c2cData.count = 0;
+                this.showDisabled();
+                this.eDiv.classList.remove("fab-minimized");
+                this.deleteBadge();
+            }
+        }
+        if (event.altKey && event.keyCode === DIGIT_TWO_CODE) {
+                if(window.messagingApp) { 
+                window.messagingApp.getCIAppInstance().minimize();
+            }
+        }
+        this.flyInClose();
+     }
+
+    /************************** End Custom Bootstrap controlled C2C rendering logic ***********************************/
+
+    var c2c = new BootStrapC2C({"animateDelay":500, dragEnabled:false});
+    c2c.setParentElement(doc.getElementById(chatDivID));
+
+    return {
+      messageOnMinimzed:function(count, msgObject) {
+        if(c2c) {
+          c2c.newMinimizedMessage(count, msgObject);
+        }
+      },
+
+      setMinimized:function(count) {
+        if(!c2c.isDisplayed()) {
+          c2c.renderC2CButton({ "image": "d"});
+        }
+        if(c2c && c2c.c2cData){
+          c2c.c2cData.image = "m";
+          c2c.c2cData.count = count;
+          if(c2c.isDisplayed()) {
+            c2c.renderState("m",{launchable:true})
+          }
+        }
+      },
+      
+      displayChatFab:function() {
+        if(!c2c.isDisplayed()) {
+          c2c.renderC2CButton({
+            image: 'd', 
+            displayState:"chatactive"
+          }, !this.isChatDisplayedOnce);
+        }
+      }
+    }
+  }(Inq);
+}

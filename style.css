@@ -1,0 +1,1256 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+.all{
+    width: 100%;
+}
+.main {
+    width: 100%;
+}
+.navbar{
+    width: 100%;
+    height: 50px;
+    background-color: #4D148C;
+    display: flex;
+    position: sticky;
+    top:0px;
+    z-index:1; 
+    justify-content: center; 
+    min-width:950px;
+    
+    
+}
+.navcontent{
+    width: 80%;
+    align-items: center;
+    display: flex;
+}
+.image{
+   
+    width:10%;
+    
+}
+
+
+.options{
+    width:70%;
+   
+    
+}
+
+.options ul{
+    display: flex;
+    margin-top:5px;
+    list-style: none;
+   
+}
+
+.options ul li{
+    font-size: 14px;
+    font-family: sans-serif;
+    color: white;
+    margin-left: 50px;
+   
+}
+li:hover{
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+
+.signup{
+    width:30%;
+    
+}
+.signup span{
+    color:white;
+    font-family: sans-serif;
+    padding-left: 20px;
+}
+.hamburger{
+    display: none;
+}
+#searchicon,#contact{
+    font-size: 20px;
+}
+
+.option:hover{
+    border-bottom: 1px solid white;
+}
+.backgroundimage{
+    width:100%;
+    background-image: url("./images/main\ banner.jpg");
+    background-repeat: no-repeat;
+    
+   background-position: center;
+   background-size:cover ;
+    min-width: 950px; 
+   height: 500px;
+   
+}
+.background-content{
+    width:100%;
+    height:500px;
+    
+}
+.headingandboxes{
+    height: 72.6%;
+    
+    width:100%;
+    
+    
+
+    
+}
+.important-message{
+    text-align: center;
+    padding-top:80px;
+    color:white;
+    font-family: sans-serif;
+    font-weight: lighter;
+    width:100%;
+    font-size: 45px;
+
+}
+.boxes{
+   
+    width:37%;
+    
+    display: flex;
+    
+    margin:  60px auto;
+    /* margin-top: 90px; */
+    
+    
+}
+ 
+.box{
+    width:33%;
+    height:120px;
+   
+    background-color: white;
+    
+    
+}
+.box>p{
+    font-family: sans-serif;
+    font-weight: 200;
+    font-size:12px;
+}
+.box2,.box3,.box1{
+    text-align: center;
+}
+.box2>img{
+    margin-left:10px
+    
+}
+.box3>img{
+    padding-top: 20px;
+}
+.box2{
+    color:white;
+    background-color:#4D148C;
+}
+.main-footer{
+    width:100%;
+   
+    display: flex;
+    justify-content: center;
+    
+    
+}
+.searchtracking{
+    
+   
+    display: flex;
+    
+}
+.trackingid{
+background-color: white;
+width:437px;
+    height: 60px;
+    display: flex;
+     align-items: center; 
+    font-family: sans-serif;
+    font-weight: 700;
+    
+}
+.track{
+    width:155px;
+    height:60px;
+    background-color: #FF6200;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    margin-left: 3px;
+    color: white;
+ 
+}
+.help{
+    color:white;
+    width:100%;
+    margin-top:30px;
+}
+.help p{
+    z-index: 1;
+    height: 60px;
+  
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    width:80%;
+    
+}
+.trophyannouncement{
+    z-index: 1;
+    border:2px solid black;
+    height:48px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 950px;
+}
+.trophyannouncement p{
+    
+    font-family: sans-serif;
+    font-weight: 600;
+    width: 100%;
+
+    
+    
+}
+.desktophidden{
+    visibility: hidden;
+    height: 40px;
+    border:2px solid black;
+}
+ .main2{
+    width:100%;
+    
+    min-width: 950px;
+    
+   
+    
+    
+    
+}
+.cmpcontainer{
+    
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    min-width: 950px;
+}
+.cropimage{
+    
+    background-image: url('images/cut.jpg');
+    display:block;
+    width: 100%;
+    height: 275px;
+    min-width: 950px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  
+} 
+.cropimage h1{
+    margin-top: 40px;
+    font-family: sans-serif;
+    font-weight: 400;
+    width: 465.5px;
+    height: 72px;
+    font-size: 36px;
+    text-align: left;
+}
+.smallbusiness{
+    margin-left: 50px;
+}
+.cropimage p {
+    font-size: 19px;
+    font-weight: 200;
+    line-height: 1.0em;
+    text-align: left;
+    width: 45%;
+    margin-top: 40px;
+
+    font-family: sans-serif;
+}
+.startsavingbutton{
+    font-size: 19px;
+    text-align: left;
+    margin-top: 20px;
+    width: 40%;
+    height:50px;
+    display: block;
+    
+    
+    
+}
+button{
+    background-color: transparent;
+    height: 100%;
+    width: 45%;
+    border:2px solid #007AB7;
+    border-radius: 20px ;
+    color:#007AB7;
+    font-weight: bold;
+    
+}
+button:hover{
+    width: 45.5%;
+    height: 100.5%;
+    font-size: 15px;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: .3s;
+
+}
+.cmpspacer{
+    height: 30px;
+    width: 100%;
+    
+    visibility: hidden;
+}
+.manageheading>h2{
+    text-align: center;
+    font-family: sans-serif;
+    font-weight:100;
+    letter-spacing: 0.6;
+    font-size: 32px;
+    
+    height: 60px;
+
+}
+.bannerlogos{
+    width: 100%;
+    display: flex;
+    
+    
+    
+}
+.logos{
+    justify-content: space-around;
+    width: 188px;
+    height:189.4;
+
+    
+}
+
+.bannerspaces{
+    height: 21px;
+    width: 118px;
+    visibility: hidden;
+}
+.logos p{
+    text-align: center;
+    width: 62.7%;
+    height: 36.38px;
+    color: #007AB7;
+    font-family: sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    margin: auto;
+}
+.logos p:hover{
+    border-bottom:1px solid #007AB7;
+    cursor: pointer;
+}
+.afterbannerspacer{
+
+    width: 100%;
+    height: 50px;
+    visibility: hidden;
+}
+.trophytreatment{
+    width:100%;
+    
+    height: 321px;
+    display: flex;
+    
+    
+}
+.trophyimage{
+    width:50%;
+
+
+}
+.trophycontent{
+    width:70%;
+    
+    background-color: #FAFAFA;
+    height: 321px;
+    
+}
+.trophylogo{
+    width:130px;
+    height:60px;
+    margin-top: 30px;
+    
+   
+}
+.headingtrophy{
+    width:424px;
+    height:90px;
+    text-align: left;
+   
+}
+.headingtrophy h3{
+    
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 23px;
+}
+
+.headingtrophy p{
+    margin-top: 40px;
+    width:424px;
+    height: 72px;
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+.headingtrophy span{
+    
+    color: #007AB7;
+    font-weight: 600;
+    font-family: sans-serif;
+    
+}
+.headingtrophy span:hover{
+    cursor: pointer;
+    border-bottom: 1px solid #007AB7;
+}
+.aftertrophyspace{
+    width: 100%;
+    height: 40px;
+    
+}
+.aim2024{
+    width: 100%;
+    display: flex;
+    height: 531px;
+
+}
+.happygirl{
+    width: 49%;
+    margin-right: 1%;
+   
+}
+.happygirl>img{
+    display:block;
+}
+.girlspacer{
+    width: 100%;
+    height: 20px;
+}
+.girlcontent{
+    width: 100%;
+    
+
+    
+}
+.girlcontent h3{
+    font-family: sans-serif;
+    font-weight: lighter;
+    width:420px;
+    height: 83.19px;
+    font-size: 28px;
+    text-align: left;
+
+}
+.girlcontent p{
+    text-align: left;
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+.hawk{
+    width: 49%;
+    margin-left: 1%;
+    
+}
+.hawkspacer{
+    height:40px;
+}
+.hawk h3{
+    text-align: left;
+    width:339px;
+    height: 39px;
+    font-family: sans-serif;
+    font-size: 28px;
+    font-weight: lighter;
+}
+.hawk p{
+    text-align: left;
+    font-family: sans-serif;
+    font-weight: 100;
+}
+.afterparaspacer{
+    width:100%;
+    height: 15px;
+}
+.prepbutton,.truestorybutton{
+    color:#007AB7;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 800;
+    text-align: left;
+    font-family: sans-serif;
+    
+}
+.aim2024 span:hover{
+    border-bottom: 1px solid  #007AB7;
+    cursor: pointer;
+
+}
+.afteraimspacer{
+    height: 40px;
+    width: 100%;
+}
+
+.valentineday{
+ width: 100%;
+}
+.valentineday h2{
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 35px;
+    width: 100%;
+    height: 92px;
+    text-align: center;
+}
+.valentineheadspacer,.valentinesectionheadspacer{
+    height: 20px;
+}
+
+.valentinesec1,.valentinesec2{
+    width: 100%;
+    display: flex;
+    height:207px;
+    justify-content: space-around;
+}
+.sec2content,.sec1content{
+    width:65.7%;
+    
+}
+.sec1spacer,.sec2spacer{
+    width:100%;
+    height:13px
+}
+.valeentinebutton{
+    color:#007AB7;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 800;
+    text-align: left;
+    font-family: sans-serif;
+}
+.valeentinebutton span:hover{
+border-bottom: 1px solid  #007AB7;
+    cursor: pointer;
+}
+.valentinesections h3{
+          font-size:30px;
+          font-weight: lighter;
+          text-align: left;
+          font-family: sans-serif;
+}
+.valentinesections p{
+        font-size:14px;
+          font-weight: lighter;
+          text-align: left;
+          font-family: sans-serif;
+}
+.aftervalenspacer{
+    height: 40px;
+    width:100%;
+}
+.shipments h2{
+    
+    height:52px;
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 35px;
+    width: 100%;
+   
+    text-align: center;
+}
+.shipmentheadspacer{
+    height:15px;
+    width:100%;
+}
+.shipmentssec{
+    width:100%;
+    height:424px;
+    display: flex;
+    
+}
+.shipmentsec1,.shipmentsec2{
+    width:50%;
+}
+
+.shipimg{
+    width:100%;
+    height:128px;
+    margin: 0 auto;
+}
+.shipsec2contentspacer{
+    height: 13px;
+    width: 100%;
+}
+.shipsec1contentspacer{
+    height:13px;
+    width: 100%;
+}
+
+
+.shipments h3{
+    height:109px;
+    width:450px;
+    font-size:30px;
+    font-weight: lighter;
+    text-align: left;
+    font-family: sans-serif;
+}
+.shipments p{
+    width:450px;
+    height:96px;
+    font-size:16px;
+    font-weight: lighter;
+    text-align: left;
+    font-family: sans-serif;
+}
+.shiping{
+    margin:10px;
+}
+.shipmentsbutton{
+    display: inline-block;
+    height:58.6px;
+    width:60%;
+    border-radius: 40px;
+   
+    
+}
+.shipmentsbutton span{
+   
+   text-align: center;
+    font-family: sans-serif;
+    font-weight: bolder;
+    color: #007AB7;
+    letter-spacing: 0.3px;
+    height:58.6px;
+    display: flex;
+    margin: 0% auto;
+    justify-content:center ;
+    align-items: center;
+    border:3px solid #007AB7;
+    border-radius: 40px;
+
+}
+.shipmentsbutton span:hover{
+    transition: 0.1s;
+    height:60px;
+    font-size:17px;
+    color: #0c70a1;
+    width:101%;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+.aftershippingspacer{
+    height: 40px;
+    width:100%;
+    
+}
+.nonprofitsection{
+    width:100%;
+    height: 463px;
+    background-image:url('images/unclepic.jpg') ;
+    background-size: cover;
+   
+    background-repeat: no-repeat;
+    overflow: hidden;
+    
+
+}  
+.nonprofitcontent{
+   margin-top: 50px;
+    width:90%;
+    height:403px; 
+    display: flex;
+    margin-left: 30px;
+}
+.nonprofitcontentleft{
+    width:55%;
+visibility: hidden;
+}
+.nonprofitcontentright{
+    width:45%;
+    background-color:rgba(255,255,255,0.75);
+    
+}
+.nonprofitspacer{
+    height:30px;
+}
+.nonprofitcontentright h3 {
+    
+    margin:auto;
+    
+    width:270px;
+    text-align: left;
+    height:74.38px;
+    font-size: 24px;
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+.nonprofitcontentright p {
+    margin:  auto;
+    width:270px;
+    text-align: left;
+    height: auto;
+   line-height: 1.6;
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+
+.nonprofitbutton {
+    color: #0c70a1;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+     width:230px;
+    height:50px;
+    border:2px solid #007AB7;
+    border-radius: 30px;
+   background-color: transparent;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+.nonprofitbutton:hover{
+    font-size:15px ;
+    color:#0a6d9e;
+    width:232px;
+    height: 52px;
+    transition: all .3s;
+    cursor: pointer;
+}
+
+.cmpspacer2{
+    height: 20px;
+    visibility:hidden;
+    
+}
+.impressions h2{
+    height:52px;
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 35px;
+    width: 100%;
+     
+    text-align: center;
+}
+.customizepacking,.busyspring{
+    
+    display: flex;
+    width: 100%;
+    height: 161.73px;
+}
+.busypic,.customizepic{
+    width:25%;
+    height:100%;
+    
+}
+.busycontent,.customizecontent{
+    width:73%;
+    margin-left:5%;
+}
+.impressions h3{
+    height: 60px;
+    text-align: left;
+    font-size: 32px;
+    font-weight: lighter;
+    font-family: sans-serif;
+    
+}
+
+.impressions p{
+    height: 56px;
+    text-align: left;
+    font-family: sans-serif;
+
+}
+.impressions span{
+    text-align: left;
+    font-weight: 700;
+    color:#007AB7;
+    letter-spacing: 0.3;
+    font-family: sans-serif;
+    
+
+}
+.busylink,.customizelink{
+    text-align: left;
+}
+.impressions span:hover{
+    cursor:pointer;
+    border-bottom:1px solid #0c70a1;
+}
+.afterimpressionspacer{
+   height: 60px;
+}
+
+.moneybackguarantee{
+    width: 100%;
+    height: 80px;
+}
+.fedexmoneyback{
+ height: 24px;
+ font-family: sans-serif;
+ font-weight:bold;
+ text-align: left;
+}
+.fedexmoneybackcontent{
+    height: 48px;
+    text-align: left;
+    font-family: sans-serif;
+    font-weight:lighter;
+}
+.aftermoneybackguaranteespacer{
+    height:55px;
+}
+.footer{
+    width:100%;
+
+    background-color: #FAFAFA;
+    height: 400px;
+}
+.primaryfooter{
+    height:258.59px;
+    width: 100%;
+    
+    
+    margin: auto;
+}
+.primaryfooter h5{
+    color:#4D148C;
+    font-weight: bolder;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+.primaryfootercontent{
+    width:80%;
+    height:258.59px;
+    border-bottom:1px solid grey;
+     margin: auto;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.primaryfootercontent1,.primaryfootercontent2,.primaryfootercontent3{
+    
+   
+    
+    width:20%;
+    
+}
+.primaryfootercontent h5{
+   height:50px;
+}
+.primaryfootercontent2{
+    margin-top: 50px;
+}
+
+.primaryfootercontent span{
+      height:23.59px;
+      display: block;
+      width:131.66;
+     
+      font-family: sans-serif;
+      font-size: 12px;
+}
+
+.footerlinks{
+    height: 91.59px;
+    background-color: #FAFAFA;
+    display: flex;
+    
+    align-items: center;
+}
+.footerlinks span{
+    margin-left:10px;
+
+}
+.links{
+    width:50%;
+    display: flex;
+    justify-content: center;
+}
+.links h5{
+    margin-top: 10px;
+    display: inline;
+    color: #4D148C;
+    font-weight: bolder;
+    font-family: sans-serif;
+}
+.copyright{
+    height: 61.73px;
+    width: 100%;
+    background-color: #4D148C;
+
+    
+}
+.copysections{
+    margin: auto;
+    margin-top: 25px;
+    width:80%;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+.copyleftsec{
+ 
+    width: 30%;
+    text-align: left;
+    color: white;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.copyrightsec{
+    width: 70%;
+    text-align: right;
+}
+.copyrightsec span{
+    margin-left: 10px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+.foot:hover{
+    border-bottom: 1px solid white;
+    cursor: pointer;
+    
+}
+
+.earthpic{
+    margin-top: 10px;
+     margin-left: 10px;
+}
+.primaryrightfooter h3{
+    font-size: 14px;
+    color: #4D148C;
+    height: 50px;
+    font-family: sans-serif;
+    font-weight: bolder;
+}
+select{
+    font-size: 12px;
+   
+    margin-top: 30px;
+    width:150px;
+    height: 50px;
+    background-color: transparent;
+   
+}
+@media (min-width:1024px) {
+    .signup {
+        text-align: right;
+        padding-left: 10px;
+      
+        
+    }
+    .hamburger{
+        visibility: hidden;
+    }
+    
+}
+@media only screen and (min-width: 576px) and (max-width: 767.98px) {
+    .navbar{
+        width:100%;
+    }
+    .navcontent{
+        width:100%;
+    }
+    .image{
+        width:30%;
+        
+    }
+    .options{
+        visibility: hidden;
+        width:20%;
+        
+    }
+    .signup{
+        width:50%;
+        text-align: right;
+
+    }
+    .signup span{
+        padding-left: 5px;
+    }
+    .hamburger{
+        font-size: 24px;
+        display: inline;
+    }
+    #searchicon{
+        display: none;
+    }
+    .trophyannouncement{
+        border:2px solid black;
+        height:48px;
+       
+        
+       font-family: sans-serif;
+       font-weight: 600;
+       
+       margin-top: 0px;
+    }
+    /* .important-message{
+       text-align: center;
+       margin:0 auto;
+       font-size: 40px;
+        height:500px;
+        width:50%;
+      
+    
+    } */
+    
+    
+    
+  }
+
+  @media only screen and (max-width: 576px) {
+    
+    .navbar{
+        width:100%;
+       height: 32px;
+    }
+    .navcontent{
+        width:100%;
+         
+    }
+    .image{
+        width:30%;
+        
+    }
+    .options{
+        visibility: hidden;
+        width:10%;
+        
+    }
+    .signup{
+        width:60%;
+        text-align: right;
+
+    }
+    .mes{
+        display: none;
+    }
+    .signup span{
+        padding-left: 25px;
+        
+    }
+    .hamburger{
+        font-size: 30px;
+        display: inline;
+    }
+    #searchicon{
+        display: none;
+    }
+    #contact{
+        font-size: 30px;
+    }
+    .backgroundimage{
+        width:100%;
+       
+        background-repeat: no-repeat;
+        height: 200px;
+       background-position: center;
+  
+    }
+    .searchtracking{
+    
+        width: 100%;
+        display: block;
+        
+    }
+    .trackingid{
+    background-color: rgb(245, 242, 242);
+    width:100%;
+    height: 60px;
+        
+        font-family: sans-serif;
+        font-weight: 700;  
+    }
+    .track{
+        width:100%;
+        height:60px;
+        background-color: #FF6200;
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        
+       
+        
+     
+    }
+    .help{
+        color:black;
+        width:100%;
+        margin-top:5px;
+        
+    }
+    .multipletracking{
+        display: none;
+    }
+    .help{
+        height: 60px;
+    }
+    .help p{
+        display: inline;
+        
+        color: rgb(153, 153, 194);
+        
+        
+    }
+    .important-message{
+        padding-top:30px;
+        color:white;
+        font-family: sans-serif;
+        font-weight: 100;
+        height: 150px;
+        width: 60%;
+        padding-left: 300px;
+    
+    }
+    .trophyannouncement{
+        margin-top: 300px;
+        border: none;
+       
+        background-color: rgba(230, 218, 218, 0.322);
+        border-bottom:1px solid #4D148C;
+        flex-wrap: wrap;
+    }
+    .bannerlogos{
+        justify-content: space-around;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+
+    }
+    .bannerspaces{
+        display: none;
+    }
+  
+    .trophytreatment{
+        width:100%;
+        height: 642px;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        
+        
+    }
+    .trophyimage{
+        width:50%;
+    
+    
+    }
+    .trophycontent{
+        
+        width:45%;
+        margin:0%;
+        background-color: #FAFAFA;
+        height: 321px;
+        
+    }
+    .main2{
+        width: 100%;
+    }
+    .cmpcontainer{
+        width: 100%;
+    }
+    .aim2024{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 1050px;
+        align-items: center;
+        
+    }
+    .hawk{
+
+     margin-top: 20px;
+    }
+    .valentinesec1,.valentinesec2{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height:414px;
+        justify-content: space-around;
+    }
+    .valentinesec2{
+        flex-direction: column-reverse;
+    }
+    .sec2content,.sec1content{
+        width:65.7%;
+        
+    }
+    .valentineheadspacer{
+        display: none;
+    }
+    .shipmentssec{
+        width:100%;
+       height:100%;
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        
+    }
+    .shipmentsec2{
+        margin-top: 10px;
+    }
+
+    .nonprofitcontentleft{
+        visibility: hidden;
+    }
+    .nonprofitsection{
+        margin: 20px;
+         
+        width:auto;
+        
+        background-image:url('images/unclepic.jpg') ;
+        background-size: cover;
+       background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+
+    
+    } 
+    .customizepacking,.busyspring{
+         flex-direction: column;
+        display: flex;
+        width: 100%;
+        height: 324px;
+        align-items: center;
+    }
+    
+    
+    }
+    
+  
+   
+  
+  
